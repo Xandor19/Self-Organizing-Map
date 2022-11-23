@@ -1,6 +1,7 @@
 package cu.edu.cujae.som.map
 
 import cu.edu.cujae.som.data.VectorSet
+import cu.edu.cujae.som.function.{DistanceFn, NeighborhoodFn}
 import cu.edu.cujae.som.io.MapConfig
 
 /**
@@ -13,10 +14,15 @@ import cu.edu.cujae.som.io.MapConfig
  * @param distanceFn Funcion de distancia a utilizar
  * @param neighborhoodFn Funcion de vecindad a utilizar en el entrenamiento
  */
-class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private val _tuningFactor: Double,
-                _neighRadius: Double, distanceFn: (Array[Double], Array[Double]) => Double,
-                neighborhoodFn: (Float, Float, Float, Float, Double) => Double)
-                 extends Som (_lattice, _neighRadius, distanceFn, neighborhoodFn) {
+class OnlineSom (
+                  _lattice: Lattice,
+                  private val _learningFactor: Double,
+                  private val _tuningFactor: Double,
+                  _neighRadius: Double,
+                  distanceFn: DistanceFn,
+                  neighborhoodFn: NeighborhoodFn
+                )
+  extends Som (_lattice, _neighRadius, distanceFn, neighborhoodFn) {
 
   /**
    * Proceso de auto-organizacion a realizar mediante el enfoque on-line
@@ -25,7 +31,10 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param vectorSet Conjunto de vectores de entrada a emplear en el entrenamiento
    * @param mapConfig Parametros de configuracion del entrenamiento
    */
-  def organizeMap (vectorSet: VectorSet, mapConfig: MapConfig): Unit = {
+  def organizeMap (
+                    vectorSet: VectorSet,
+                    mapConfig: MapConfig
+                  ): Unit = {
     // Fase de entrenamiento de la red
     roughTraining(vectorSet, mapConfig.trainIter)
 
@@ -52,7 +61,10 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param vectorSet Vectores de entrada usados para entrenamiento
    * @param trainIters Numero de iteraciones de entrenamiento
    */
-  def roughTraining (vectorSet: VectorSet, trainIters: Int): Unit = {
+  def roughTraining (
+                      vectorSet: VectorSet,
+                      trainIters: Int
+                    ): Unit = {
     // Valores de radio y factor iniciales
     var decRadius = neighRadius
     var decFactor = learningFactor
@@ -88,7 +100,11 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param fixedNeigh Valor de vecindad fijo
    * @param tuningIters Numero de iteraciones de refinamiento
    */
-  def tuning (vectorSet: VectorSet, fixedNeigh: Double, tuningIters: Int): Unit = {
+  def tuning (
+               vectorSet: VectorSet,
+               fixedNeigh: Double,
+               tuningIters: Int
+             ): Unit = {
     for (_ <- 0 until tuningIters) {
       // Obtiene el iterador sobre los vectores de entrada
       val setIt = vectorSet.iterator
@@ -122,8 +138,14 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param unit Neurona a actualizar
    * @param inputVector Vector de pesos que fue representado por la BMU
    */
-  def applySingleTraining (bmuX: Float, bmuY: Float, unit: Neuron, inputVector: Array[Double],
-                           decFactor: Double, decRadius: Double): Unit = {
+  def applySingleTraining (
+                            bmuX: Float,
+                            bmuY: Float,
+                            unit: Neuron,
+                            inputVector: Array[Double],
+                            decFactor: Double,
+                            decRadius: Double
+                          ): Unit = {
     // Obtiene el vector de pesos de la neurona
     val weights = unit.weightVector
 
@@ -153,7 +175,11 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param bmu BMU a refinar
    * @param inputVector Vector de entrada que fue representado por la BMU
    */
-  def applySingleTuning (bmu: Neuron, inputVector: Array[Double], neighValue: Double): Unit = {
+  def applySingleTuning (
+                          bmu: Neuron,
+                          inputVector: Array[Double],
+                          neighValue: Double
+                        ): Unit = {
     // Obtiene el vector de pesos de la BMU
     val vector = bmu.weightVector
 
@@ -193,7 +219,10 @@ class OnlineSom(_lattice: Lattice, private val _learningFactor: Double, private 
    * @param totIter Total de iteraciones a efectuar
    * @return Factor de aprendizaje para la iteracion actual
    */
-  def updateFactor (epoch: Int, totIter: Float): Double = {
+  def updateFactor (
+                     epoch: Int,
+                     totIter: Float
+                   ): Double = {
     learningFactor * (1 - epoch / totIter)
   }
 

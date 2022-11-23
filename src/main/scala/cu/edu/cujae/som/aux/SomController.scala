@@ -3,8 +3,9 @@ package cu.edu.cujae.som.aux
 import java.util.concurrent.TimeUnit
 
 import cu.edu.cujae.som.data.{InputVector, RandomVectorSet, VectorSet}
+import cu.edu.cujae.som.function.InitFactory
 import cu.edu.cujae.som.io.{ClusteringData, DetectionData, ExperimentData, MapConfig, MapIo, ReaderWriter, Tasks}
-import cu.edu.cujae.som.map.{FunctionCollector, Som, SomFactory}
+import cu.edu.cujae.som.map.{Som, SomFactory}
 
 import scala.util.Random
 
@@ -311,7 +312,7 @@ object SomController {
     val som = SomFactory.createSom(config)
 
     // Establece el estado inicial del Som
-    som.initSom(trainingSet, FunctionCollector.initFactory(config.initFn), config.initSeed)
+    som.initSom(trainingSet, InitFactory(config.initFn), config.initSeed)
 
     // Entrena el Som
     som.organizeMap(trainingSet, config)

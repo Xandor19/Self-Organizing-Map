@@ -113,7 +113,7 @@ class MapConfig (var dataset: String, val setProp: Double, val trainingProp: Dou
     // Se requiere la cantidad de iteraciones
     if (trainIter == 0) {
       // Valor por omision para entrenamiento on-line
-      if (somType == SomType.onlineSom) trainIter = 1000
+      if (somType == SomType.OnlineSom) trainIter = 1000
       // Valor por omision para entrenamiento en batch
       else trainIter = 200
     }

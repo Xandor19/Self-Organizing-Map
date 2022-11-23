@@ -1,6 +1,7 @@
 package cu.edu.cujae.som.map
 
 import cu.edu.cujae.som.data.VectorSet
+import cu.edu.cujae.som.function.{DistanceFn, NeighborhoodFn}
 import cu.edu.cujae.som.io.MapConfig
 
 /**
@@ -11,9 +12,13 @@ import cu.edu.cujae.som.io.MapConfig
  * @param _distanceFn Funcion de distancia a utilizar
  * @param _neighborhoodFn Funcion de vecindad a utilizar en el entrenamiento
  */
-class BatchSom(_lattice: Lattice, _neighRadius: Double, _distanceFn: (Array[Double], Array[Double]) => Double,
-               _neighborhoodFn: (Float, Float, Float, Float, Double) => Double)
-               extends Som (_lattice, _neighRadius, _distanceFn, _neighborhoodFn) {
+class BatchSom (
+                 _lattice: Lattice,
+                 _neighRadius: Double,
+                 _distanceFn: DistanceFn,
+                 _neighborhoodFn: NeighborhoodFn
+               )
+  extends Som (_lattice, _neighRadius, _distanceFn, _neighborhoodFn) {
 
   /**
    * Proceso de auto-organizacion a realizar mediante el enfoque en batch
@@ -22,7 +27,10 @@ class BatchSom(_lattice: Lattice, _neighRadius: Double, _distanceFn: (Array[Doub
    * @param vectorSet Conjunto de vectores de entrada a emplear en el entrenamiento
    * @param mapConfig Parametros de configuracion del entrenamiento
    */
-  override def organizeMap(vectorSet: VectorSet, mapConfig: MapConfig): Unit = {
+  override def organizeMap(
+                            vectorSet: VectorSet,
+                            mapConfig: MapConfig
+                          ): Unit = {
     var decRadius = _neighRadius
 
     // Obtiene la cantidad de iteraciones
@@ -69,7 +77,10 @@ class BatchSom(_lattice: Lattice, _neighRadius: Double, _distanceFn: (Array[Doub
    * @param current Neurona a entrenar
    * @param currentRadius Radio de vecindad actual
    */
-  def applySingleBatch (current: Neuron, currentRadius: Double): Unit = {
+  def applySingleBatch (
+                         current: Neuron,
+                         currentRadius: Double
+                       ): Unit = {
     // Acumuladores de resultados parciales
     var accVector = new Array[Double](dimensionality)
     var accNeigh = 0D

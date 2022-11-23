@@ -6,7 +6,11 @@ package cu.edu.cujae.som.map
  * @param _width Ancho de la grilla
  * @param _height Altura de la grilla
  */
-class HexLattice (_width: Int, _height: Int) extends Lattice (_width, _height) {
+class HexLattice (
+                   _width: Int,
+                   _height: Int
+                 )
+  extends Lattice (_width, _height) {
 
   /**
    * Funcion abstracta para obtener las coordenadas de una neurona segun
@@ -16,7 +20,10 @@ class HexLattice (_width: Int, _height: Int) extends Lattice (_width, _height) {
    * @param j Indice de columna en la grilla
    * @return Tupla (coordenada X, coordenada Y)
    */
-  override def coordFromIndex (i: Int, j: Int): (Float, Float) = {
+  override def coordFromIndex (
+                                i: Int,
+                                j: Int
+                              ): (Float, Float) = {
     // Seno y coseno de 60º, empleados para la conversion de coordenadas
     val c60 = math.cos(math.Pi / 3)
     val s60 = math.sin(math.Pi / 3)
@@ -35,7 +42,11 @@ class HexLattice (_width: Int, _height: Int) extends Lattice (_width, _height) {
    * @param i Indice de fila en la grilla
    * @param j indice de columna en la grilla
    */
-  override def addNeighbors (neuron: Neuron, i: Int, j: Int): Unit = {
+  override def addNeighbors (
+                              neuron: Neuron,
+                              i: Int,
+                              j: Int
+                            ): Unit = {
     if (i % 2 == 0) {
       // Fila par
       if (j > 0) neurons(i)(j).addNeighbor(neurons(i)(j - 1))
@@ -56,5 +67,5 @@ class HexLattice (_width: Int, _height: Int) extends Lattice (_width, _height) {
    *
    * @return Constante de LatticeDistribution que representa el tipo de distribucion
    */
-  override def latticeType: String = LatticeDistribution.hexagonal
+  override def latticeType: String = LatticeDistribution.Hexagonal
 }

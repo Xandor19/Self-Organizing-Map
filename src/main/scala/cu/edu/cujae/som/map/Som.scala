@@ -1,6 +1,7 @@
 package cu.edu.cujae.som.map
 
 import cu.edu.cujae.som.data.{InputVector, VectorSet}
+import cu.edu.cujae.som.function.{DistanceFactory, DistanceFn, InitFn, NeighborhoodFactory, NeighborhoodFn}
 import cu.edu.cujae.som.io.{MapConfig, MapIo}
 
 import scala.util.Random
@@ -13,9 +14,12 @@ import scala.util.Random
  * @param distanceFn Funcion de distancia a utilizar
  * @param neighborhoodFn Funcion de vecindad a utilizar en el entrenamiento
  */
-abstract class Som (private val _lattice: Lattice, private val _neighRadius: Double,
-                    private val distanceFn: (Array[Double], Array[Double]) => Double,
-                    private val neighborhoodFn: (Float, Float, Float, Float, Double) => Double) {
+abstract class Som (
+                     private val _lattice: Lattice,
+                     private val _neighRadius: Double,
+                     private val distanceFn: DistanceFn,
+                     private val neighborhoodFn: NeighborhoodFn
+                   ) {
 
   /*
    * Atributos de clase
@@ -32,8 +36,11 @@ abstract class Som (private val _lattice: Lattice, private val _neighRadius: Dou
    * @param initFn Funcion de inicializacion de los vectores de peso del SOM
    * @param seed Semilla para la inicializacion aleatoria
    */
-  def initSom (trainingSet: VectorSet, initFn: (Iterable[Array[Double]], VectorSet, Long) => Unit,
-              seed: Long = Random.nextInt()): Unit = {
+  def initSom (
+                trainingSet: VectorSet,
+                initFn: InitFn,
+                seed: Long = Random.nextInt()
+              ): Unit = {
     // Fija la dimensionalidad del SOM
     dimensionality = trainingSet.dimensionality
 
@@ -69,7 +76,10 @@ abstract class Som (private val _lattice: Lattice, private val _neighRadius: Dou
    * @param vectorSet Conjunto de vectores de entrada a emplear en el entrenamiento
    * @param mapConfig Parametros de configuracion del entrenamiento
    */
-  def organizeMap (vectorSet: VectorSet, mapConfig: MapConfig): Unit
+  def organizeMap (
+                    vectorSet: VectorSet,
+                    mapConfig: MapConfig
+                  ): Unit
 
 
   /**
@@ -122,7 +132,10 @@ abstract class Som (private val _lattice: Lattice, private val _neighRadius: Dou
    * @param totIters Total de iteraciones a realizar
    * @return Valor del radio para el instante actual
    */
-  def updateRadius (iter: Int, totIters: Float): Double = {
+  def updateRadius (
+                     iter: Int,
+                     totIters: Float
+                   ): Double = {
     neighRadius * (1 - iter / totIters)
   }
 
@@ -208,16 +221,16 @@ object SomFactory {
    */
   def createSom (config: MapConfig): Som = {
     // Obtiene las funciones a emplear
-    val distFn = FunctionCollector.distanceFactory(config.distanceFn)
-    val neighFn = FunctionCollector.neighboringFactory(config.neighFn)
+    val distFn = DistanceFactory(config.distanceFn)
+    val neighFn = NeighborhoodFactory(config.neighFn)
 
     config.somType match {
-      case SomType.onlineSom =>
-        new OnlineSom(LatticeFactory.createLattice(config.latDistrib, config.width, config.height),
+      case SomType.OnlineSom =>
+        new OnlineSom(LatticeFactory(config.latDistrib, config.width, config.height),
           config.learnFactor, config.tuneFactor, config.neighRadius, distFn, neighFn)
 
-      case SomType.batchSom =>
-        new BatchSom(LatticeFactory.createLattice(config.latDistrib, config.width, config.height),
+      case SomType.BatchSom =>
+        new BatchSom(LatticeFactory(config.latDistrib, config.width, config.height),
           config.neighRadius, distFn, neighFn)
 
       case _ => null
@@ -233,9 +246,9 @@ object SomFactory {
    */
   def importSom (parameters: MapIo): Som = {
     // Obtiene las funciones a emplear
-    val distFn = FunctionCollector.distanceFactory(parameters.distFn)
+    val distFn = DistanceFactory(parameters.distFn)
     // Crea el SOM
-    val som = new BatchSom(LatticeFactory.createLattice(parameters.latDistrib, parameters.width, parameters.height),
+    val som = new BatchSom(LatticeFactory(parameters.latDistrib, parameters.width, parameters.height),
                            0, distFn, null)
     // Importa la configuracion de entrenamiento en el SOM
     som.importSom(parameters)
@@ -248,6 +261,6 @@ object SomFactory {
  * Identificadores para los tipos de SOM segun enfoque de entrenamiento
  */
 object SomType {
-  val onlineSom: String = "On-line"
-  val batchSom: String = "Batch"
+  val OnlineSom: String = "On-line"
+  val BatchSom: String = "Batch"
 }

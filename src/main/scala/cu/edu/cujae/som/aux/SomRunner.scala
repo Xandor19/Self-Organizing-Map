@@ -1,5 +1,6 @@
 package cu.edu.cujae.som.aux
 
+import cu.edu.cujae.som.function.{DistanceFns, InitFns, NeighboringFns}
 import cu.edu.cujae.som.io.{MapConfig, Tasks}
 import cu.edu.cujae.som.map._
 
@@ -18,8 +19,8 @@ object SomRunner {
     var normalize = false
     val task = Tasks.anomaly
     var experiments = 30
-    var somType = SomType.batchSom
-    var latDistrib = LatticeDistribution.rectangular
+    var somType = SomType.BatchSom
+    var latDistrib = LatticeDistribution.Rectangular
     var latWidth = 0
     var latHeight = 0
     var latNeighRadius = 0
@@ -27,11 +28,13 @@ object SomRunner {
     var onlineTuningFactor = 0.2
     var trainingIters = 500
     var onlineTuningIters = 27000
-    var initFn = InitFns.randomInit
-    var distanceFn = DistanceFns.squaredEuclidean
-    var neighborhoodFn = NeighboringFns.gaussian
-    var initSeed = Random.nextInt()
-    var shuffleSeed = Random.nextInt()
+    var initFn = InitFns.RandomInit
+    var distanceFn = DistanceFns.SquaredEuclidean
+    var neighborhoodFn = NeighboringFns.Gaussian
+    var initSeed = 152253427
+    //Random.nextInt()
+    var shuffleSeed = -1918061239
+    //Random.nextInt()
     
     if (trainNew) {
       SomController.newSomFlow(new MapConfig(dataset = datasetPath, trainingExportPath = modelExportPath,

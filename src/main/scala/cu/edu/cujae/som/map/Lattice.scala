@@ -77,7 +77,10 @@ abstract class Lattice (private val _width: Int, private val _height: Int) {
    * @param j Indice de columna en la grilla
    * @return Tupla (coordenada X, coordenada Y)
    */
-  def coordFromIndex (i: Int, j: Int): (Float, Float)
+  def coordFromIndex (
+                       i: Int,
+                       j: Int
+                     ): (Float, Float)
 
 
   /**
@@ -88,7 +91,11 @@ abstract class Lattice (private val _width: Int, private val _height: Int) {
    * @param i Indice de fila en la grilla
    * @param j indice de columna en la grilla
    */
-  def addNeighbors (neuron: Neuron, i: Int, j: Int): Unit
+  def addNeighbors (
+                     neuron: Neuron,
+                     i: Int,
+                     j: Int
+                   ): Unit
 
 
   /**
@@ -162,10 +169,14 @@ object LatticeFactory {
    * @param height Altura de la grilla
    * @return Grilla creada en estado inicial
    */
-  def createLattice (latDistrib: String, width: Int, height: Int): Lattice = {
+  def apply (
+              latDistrib: String,
+              width: Int,
+              height: Int
+            ): Lattice = {
     latDistrib match  {
-      case LatticeDistribution.rectangular => new RectLattice(width, height)
-      case LatticeDistribution.hexagonal => new HexLattice(width, height)
+      case LatticeDistribution.Rectangular => new RectLattice(width, height)
+      case LatticeDistribution.Hexagonal => new HexLattice(width, height)
       case _ => null
     }
   }
@@ -176,6 +187,6 @@ object LatticeFactory {
  * Identificadores para las distribuciones de grillas
  */
 object LatticeDistribution {
-  val rectangular = "Rectangular"
-  val hexagonal = "Hexagonal"
+  val Rectangular = "Rectangular"
+  val Hexagonal = "Hexagonal"
 }

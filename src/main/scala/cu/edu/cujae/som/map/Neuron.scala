@@ -13,9 +13,13 @@ import cu.edu.cujae.som.data.InputVector
  * @param _balance Cantidad de entradas representadas por la neurona y cantidad de clases de estas
  * @param _mainClass Clase principal (con mas ocurrencias) en la neurona
  */
-class Neuron (private val _xPos: Float, private val _yPos: Float, private var _weightVector: Array[Double],
-              private var _hits: Int = 0, private var _balance: (Int, Int) = (0, 0),
-              private var _mainClass: String = "None") {
+class Neuron (
+               private val _xPos: Float, 
+               private val _yPos: Float, 
+               private var _weightVector: Array[Double],
+               private var _hits: Int = 0, 
+               private var _balance: (Int, Int) = (0, 0),
+               private var _mainClass: String = "None") {
   /*
    * Atributos de la clase
    */
@@ -29,7 +33,10 @@ class Neuron (private val _xPos: Float, private val _yPos: Float, private var _w
    *
    * @param inputVector Vector a ser representado por la neurona
    */
-  def representInput (inputVector: InputVector, qe: Double): Unit = {
+  def representInput (
+                       inputVector: InputVector, 
+                       qe: Double
+                     ): Unit = {
     _representedInputs = _representedInputs.updated(inputVector, qe)
   }
 
@@ -55,7 +62,7 @@ class Neuron (private val _xPos: Float, private val _yPos: Float, private var _w
   /**
    * Actualiza la cantidad de entradas representadas por esta neurona
    */
-  def updateHits (): Unit = _hits = _representedInputs.size
+  def updateHits (): Unit = hits = _representedInputs.size
 
 
   /**
@@ -70,7 +77,7 @@ class Neuron (private val _xPos: Float, private val _yPos: Float, private var _w
   /**
    * Actualiza el balance de clases de esta neurona
    */
-  def updateBalance (): Unit = _balance = (_representedInputs.size, representedClasses.size)
+  def updateBalance (): Unit = balance = (_representedInputs.size, representedClasses.size)
 
 
   /**
@@ -79,9 +86,9 @@ class Neuron (private val _xPos: Float, private val _yPos: Float, private var _w
    */
   def updateMainClass (): Unit = {
     // La neurona representa al menos un vector, se busca la clase principal
-    if (_representedInputs.nonEmpty) _mainClass = representedClasses.toList.maxBy(x => x._2)._1
+    if (_representedInputs.nonEmpty) mainClass = representedClasses.toList.maxBy(x => x._2)._1
     // La neurona no representa a ningun vector
-    else _mainClass = "None"
+    else mainClass = "None"
   }
 
 
@@ -144,9 +151,11 @@ class Neuron (private val _xPos: Float, private val _yPos: Float, private var _w
 
 
   def balance: (Int, Int) = _balance
+  def balance_= (act: (Int, Int)): Unit = _balance = act
 
 
   def mainClass: String = _mainClass
+  def mainClass_= (main: String) : Unit = _mainClass = main
 
 
   def neighbors: List[Neuron] = _neighbors

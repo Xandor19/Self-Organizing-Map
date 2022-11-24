@@ -191,7 +191,7 @@ class OnlineSom protected [map] (
       vector.update(i, currentDim + bmu.tuningRate * (currentDim - inputVector(i)))
     }
     // Actualiza el ratio de aprendizaje de la BMU
-    bmu.updateTuningRate()
+    bmu.tuningRate = updateTuning(bmu.tuningRate)
 
     // Aplica el refinamiento a cada una de las vecinas inmediatas
     bmu.neighbors.foreach(x => {
@@ -206,7 +206,7 @@ class OnlineSom protected [map] (
         weights.update(i, currentDim + x.tuningRate * neighValue * (inputVector(i) - currentDim))
       }
       // Actualiza el ratio de aprendizaje de la vecina
-      x.updateTuningRate()
+      x.tuningRate = updateTuning(x.tuningRate)
     })
   }
 
@@ -225,6 +225,19 @@ class OnlineSom protected [map] (
                    ): Double = {
     learningFactor * (1 - epoch / totIter)
   }
+
+
+  /**
+   * Actualiza el factor de refinamiento de una neurona cuando es seleccionada como BMU
+   * en la fase de refinamiento del aprendizaje on-line
+   *
+   * @param tuningRate Factor de aprendizaje actual
+   * @return Nuevo valor del factor de aprendizaje
+   */
+  def updateTuning (tuningRate: Double): Double = {
+    tuningRate / (1 + tuningRate)
+  }
+
 
   /*
    * Gets y sets

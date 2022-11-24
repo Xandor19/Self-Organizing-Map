@@ -37,7 +37,7 @@ class Neuron (
                        inputVector: InputVector, 
                        qe: Double
                      ): Unit = {
-    _representedInputs = _representedInputs.updated(inputVector, qe)
+    representedInputs = representedInputs.updated(inputVector, qe)
   }
 
 
@@ -49,11 +49,11 @@ class Neuron (
   def meanVector: Array[Double] = {
     var mean = new Array[Double](weightVector.length)
 
-    if (_representedInputs.nonEmpty) {
-      _representedInputs.keys.map(x => x.vector).foreach(vector => {
+    if (representedInputs.nonEmpty) {
+      representedInputs.keys.map(x => x.vector).foreach(vector => {
         mean = mean.zip(vector).map(x => x._1 + x._2)
       })
-      mean = mean.map(x => x / _representedInputs.size)
+      mean = mean.map(x => x / representedInputs.size)
     }
     mean
   }
@@ -62,7 +62,7 @@ class Neuron (
   /**
    * Actualiza la cantidad de entradas representadas por esta neurona
    */
-  def updateHits (): Unit = hits = _representedInputs.size
+  def updateHits (): Unit = hits = representedInputs.size
 
 
   /**
@@ -71,13 +71,13 @@ class Neuron (
    *
    * @return Map cuyo par llave/valor es [Clase, cantidad de vectores]
    */
-  def representedClasses: Map[String, Int] = Utils.classCount(_representedInputs.keys)
+  def representedClasses: Map[String, Int] = Utils.classCount(representedInputs.keys)
 
 
   /**
    * Actualiza el balance de clases de esta neurona
    */
-  def updateBalance (): Unit = balance = (_representedInputs.size, representedClasses.size)
+  def updateBalance (): Unit = balance = (representedInputs.size, representedClasses.size)
 
 
   /**
@@ -86,7 +86,7 @@ class Neuron (
    */
   def updateMainClass (): Unit = {
     // La neurona representa al menos un vector, se busca la clase principal
-    if (_representedInputs.nonEmpty) mainClass = representedClasses.toList.maxBy(x => x._2)._1
+    if (representedInputs.nonEmpty) mainClass = representedClasses.toList.maxBy(x => x._2)._1
     // La neurona no representa a ningun vector
     else mainClass = "None"
   }
@@ -95,7 +95,7 @@ class Neuron (
   /**
    * Restablece las entradas representadas por la neurona
    */
-  def clearRepresented(): Unit = _representedInputs = _representedInputs.empty
+  def clearRepresented(): Unit = representedInputs = representedInputs.empty
 
 
   /**
@@ -107,23 +107,14 @@ class Neuron (
    */
   def addNeighbor (neigh: Neuron): Boolean = {
     // Comprueba que la neurona no tenga agregada a la recibida como vecina
-    if (neigh != null && !_neighbors.contains(neigh)) {
+    if (neigh != null && !neighbors.contains(neigh)) {
       // Agrega la neurona como vecina inmediata y viceversa
-      _neighbors = _neighbors.appended(neigh)
+      neighbors = neighbors.appended(neigh)
       neigh.addNeighbor(this)
       true
     }
     // No se completo la operacion
     else false
-  }
-
-
-  /**
-   * Actualiza el factor de refinamiento de la neurona cuando es seleccionada como BMU
-   * en la fase de refinamiento del aprendizaje on-line
-   */
-  def updateTuningRate (): Unit = {
-    _tuningRate = _tuningRate / (1 + _tuningRate)
   }
 
 
@@ -140,6 +131,7 @@ class Neuron (
 
 
   def representedInputs: Map[InputVector, Double] = _representedInputs
+  def representedInputs_= (rep: Map[InputVector, Double]): Unit = _representedInputs = rep
 
 
   def tuningRate: Double = _tuningRate
@@ -159,4 +151,5 @@ class Neuron (
 
 
   def neighbors: List[Neuron] = _neighbors
+  def neighbors_= (neigh: List[Neuron]): Unit = _neighbors = neigh
 }

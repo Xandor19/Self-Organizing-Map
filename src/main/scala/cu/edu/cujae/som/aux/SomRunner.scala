@@ -18,7 +18,7 @@ object SomRunner {
     val trainingSetProp = 0.6
     var normalize = false
     val task = Tasks.anomaly
-    var experiments = 30
+    var experiments = 3
     var somType = SomType.BatchSom
     var latDistrib = LatticeDistribution.Rectangular
     var latWidth = 0

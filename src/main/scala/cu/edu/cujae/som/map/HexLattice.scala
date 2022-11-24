@@ -47,15 +47,15 @@ class HexLattice protected [map] (
                               i: Int,
                               j: Int
                             ): Unit = {
+    if (j > 0) neurons(i)(j).addNeighbor(neurons(i)(j - 1))
+
     if (i % 2 == 0) {
       // Fila par
-      if (j > 0) neurons(i)(j).addNeighbor(neurons(i)(j - 1))
       if (i > 0 && j > 0) neurons(i)(j).addNeighbor(neurons(i - 1)(j - 1))
       if (i > 0) neurons(i)(j).addNeighbor(neurons(i - 1)(j))
     }
     else {
       // Fila impar
-      if (j > 0) neurons(i)(j).addNeighbor(neurons(i)(j-1))
       if (i > 0) neurons(i)(j).addNeighbor(neurons(i-1)(j))
       if (i > 0 && j < height - 1) neurons(i)(j).addNeighbor(neurons(i-1)(j+1))
     }

@@ -14,14 +14,14 @@ import cu.edu.cujae.som.io.MapConfig
  * @param distanceFn Funcion de distancia a utilizar
  * @param neighborhoodFn Funcion de vecindad a utilizar en el entrenamiento
  */
-class OnlineSom (
-                  _lattice: Lattice,
-                  private val _learningFactor: Double,
-                  private val _tuningFactor: Double,
-                  _neighRadius: Double,
-                  distanceFn: DistanceFn,
-                  neighborhoodFn: NeighborhoodFn
-                )
+class OnlineSom protected [map] (
+                                  _lattice: Lattice,
+                                  private val _learningFactor: Double,
+                                  private val _tuningFactor: Double,
+                                  _neighRadius: Double,
+                                  distanceFn: DistanceFn,
+                                  neighborhoodFn: NeighborhoodFn
+                                )
   extends Som (_lattice, _neighRadius, distanceFn, neighborhoodFn) {
 
   /**

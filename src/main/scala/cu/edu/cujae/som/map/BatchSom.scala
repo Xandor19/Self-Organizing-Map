@@ -12,12 +12,12 @@ import cu.edu.cujae.som.io.MapConfig
  * @param _distanceFn Funcion de distancia a utilizar
  * @param _neighborhoodFn Funcion de vecindad a utilizar en el entrenamiento
  */
-class BatchSom (
-                 _lattice: Lattice,
-                 _neighRadius: Double,
-                 _distanceFn: DistanceFn,
-                 _neighborhoodFn: NeighborhoodFn
-               )
+class BatchSom protected [map] (
+                                 _lattice: Lattice,
+                                 _neighRadius: Double,
+                                 _distanceFn: DistanceFn,
+                                 _neighborhoodFn: NeighborhoodFn
+                               )
   extends Som (_lattice, _neighRadius, _distanceFn, _neighborhoodFn) {
 
   /**

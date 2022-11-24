@@ -9,14 +9,14 @@ trait InitFn {
   /**
    * Aplica la funcion de inicializacion generica representada por esta interfaz
    *
-   * @param vectors Vectores de peso a inicializar
+   * @param amount Cantidad de vectores de peso a inicializar
    * @param vectorSet Espacio de entrada a utilizar en la inicializacion
    * @param seed Semilla para inicializacion aleatoria
    */
   def apply(
-             vectors: Iterable[Array[Double]],
+             amount: Int,
              vectorSet: VectorSet, seed: Long
-           ): Unit
+           ): Iterable[Array[Double]]
 }
 
 

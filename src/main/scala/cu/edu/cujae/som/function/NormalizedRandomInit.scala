@@ -12,27 +12,23 @@ protected [function] trait NormalizedRandomInit extends InitFn {
   /**
    * Aplica la funcion de inicializacion representada por esta interfaz
    *
-   * @param vectors Vectores de peso a inicializar
+   * @param amount Cantidad de vectores de peso a inicializar
    * @param vectorSet Espacio de entrada a utilizar en la inicializacion
    * @param seed Semilla para inicializacion aleatoria
    */
   override def apply (
-                       vectors: Iterable[Array[Double]],
+                       amount: Int,
                        vectorSet: VectorSet, seed: Long
-                     ): Unit = {
+                     ): Iterable[Array[Double]] = {
     // Obtiene los limites superior e inferior del conjunto de vectores
     val bounds = vectorSet.dimBounds
     val rand = new Random()
     rand.setSeed(seed)
 
-    vectors.foreach(x => {
+    // Crea la cantidad de vectores requerida
+    for (_ <- 0 until amount ) yield
       // Genera un valor aleatorio para cada dimension
-      for (i <- bounds.indices) {
-        val dimMin = bounds(i)._1
-        val dimMax = bounds(i)._2
-
-        x.update(i, (rand.between(dimMin, dimMax) - dimMin) / (dimMax - dimMin) )
-      }
-    })
+      bounds.map{ case (dimMin, dimMax) =>
+        (rand.between(dimMin, dimMax) - dimMin) / (dimMax - dimMin) }
   }
 }

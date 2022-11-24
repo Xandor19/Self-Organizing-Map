@@ -6,10 +6,10 @@ package cu.edu.cujae.som.map
  * @param _width Ancho de la grilla
  * @param _height Altura de la grilla
  */
-class HexLattice (
-                   _width: Int,
-                   _height: Int
-                 )
+class HexLattice protected [map] (
+                                   _width: Int,
+                                   _height: Int
+                                 )
   extends Lattice (_width, _height) {
 
   /**

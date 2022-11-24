@@ -99,6 +99,13 @@ abstract class Lattice (private val _width: Int, private val _height: Int) {
 
 
   /**
+   * Proporciona el tamaño en cantidad de neuronas de la red
+   * @return Cantidad de neuronas
+   */
+  def latticeSize: Int = width * height
+
+
+  /**
    * Proporciona una representacion de la grilla con la cantidad de vectores de
    * entrada que representa cada neurona
    *

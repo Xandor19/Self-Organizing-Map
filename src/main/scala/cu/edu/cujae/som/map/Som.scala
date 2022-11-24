@@ -45,10 +45,7 @@ abstract class Som (
     dimensionality = trainingSet.dimensionality
 
     // Crea e inicializa los vectores de pesos para las neuronas
-    val initVectors = List.fill(lattice.width * lattice.height) {
-      new Array[Double](trainingSet.dimensionality)
-    }
-    initFn(initVectors, trainingSet, seed)
+    val initVectors = initFn(lattice.latticeSize, trainingSet, seed)
 
     // Construye la grilla con los vectores de pesos obtenidos
     lattice.constructLattice(initVectors)
